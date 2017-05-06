@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=TREAUXCOIN
+Comment=TREAUXCOIN P2P Cryptocurrency
+Comment[ru]=TREAUXCOIN, P2P криптовалюта
+Comment[fr]=TREAUXCOIN, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=TREAUXCOIN, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/TREAUXCOIN-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/TREAUXCOIN80.xpm
+MimeType=x-scheme-handler/TREAUXCOIN;
+Categories=Office;

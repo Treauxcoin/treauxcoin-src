@@ -1,0 +1,11 @@
+[Unit]
+Description=TREAUXCOIN daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=TREAUXCOIN
+ExecStart=/opt/TREAUXCOIN/TREAUXCOINd
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,5 @@
+TREAUXCOIN-qt usr/bin
+share/pixmaps/TREAUXCOIN32.xpm usr/share/pixmaps
+share/pixmaps/TREAUXCOIN80.xpm usr/share/pixmaps
+debian/TREAUXCOIN-qt.desktop usr/share/applications
+debian/TREAUXCOIN-qt.protocol usr/share/kde4/services/

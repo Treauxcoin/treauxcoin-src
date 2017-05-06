@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: TREAUXCOIN
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# TREAUXCOIN_enable (bool): Set to NO by default. Set this variable to YES if you want to enable TREAUXCOIN service.
+# TREAUXCOIN_config (path): Set to /usr/local/etc/TREAUXCOIN.conf by default.
+# TREAUXCOIN_user:  The user account TREAUXCOIN daemon runs as. It uses 'root' user by default.
+# TREAUXCOIN_group: The group account TREAUXCOIN daemon runs as. It uses 'wheel' group by default.
+# TREAUXCOIN_datadir (str): Default to "/var/db/TREAUXCOIN". Base data directory.
+
+. /etc/rc.subr
+
+name=TREAUXCOIN
+rcvar=TREAUXCOIN_enable
+
+: ${TREAUXCOIN_enable:=NO}
+: ${TREAUXCOIN_config=/usr/local/etc/TREAUXCOIN.conf}
+: ${TREAUXCOIN_datadir=/var/db/TREAUXCOIN}
+: ${TREAUXCOIN_user="root"}
+: ${TREAUXCOIN_group="wheel"}
+
+required_files=${TREAUXCOIN_config}
+command=/usr/local/bin/TREAUXCOINd
+TREAUXCOIN_chdir=${TREAUXCOIN_datadir}
+pidfile="${TREAUXCOIN_datadir}/TREAUXCOINd.pid"
+stop_cmd=TREAUXCOIN_stop
+command_args="-conf=${TREAUXCOIN_config} -datadir=${TREAUXCOIN_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+TREAUXCOIN_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${TREAUXCOIN_datadir}
+	[ $? -eq 0 ] && chown -R ${TREAUXCOIN_user}:${TREAUXCOIN_group} ${TREAUXCOIN_datadir}
+}
+
+TREAUXCOIN_prestart()
+{
+	if [ ! -d "${TREAUXCOIN_datadir}/." ]; then
+		TREAUXCOIN_create_datadir || return 1
+	fi
+}
+
+TREAUXCOIN_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+TREAUXCOIN_stop()
+{
+    TREAUXCOIN_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${TREAUXCOIN_config} -datadir=${TREAUXCOIN_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"
